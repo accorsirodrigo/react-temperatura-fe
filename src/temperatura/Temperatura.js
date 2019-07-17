@@ -1,13 +1,37 @@
 import React, { Component } from 'react'
 import './Temperatura.css';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-class Temp extends Component {
-  state = { retorno: {} };
+class Temperatura extends Component {
+  intervalID;
+  state = {
+    retorno: {},
+    last: {}
+  };
 
+  sort = data => {
+    if (data) {
+      let last = data[0];
+      for (let i = 0; i < data.length; i++) {
+        if (last.db_id < data[i].db_id) {
+          last = data[i];
+        }
+      }
+      this.setState({ last: last });
+    } else {
+      return undefined;
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.intervalID);
+  }
 
   async componentDidMount() {
+    this.getData();
+  };
+
+  getData = () => {
     let url = 'https://temperatura-1fa4.restdb.io/rest/tempetarura';
     let config = {
       headers: {
@@ -19,29 +43,38 @@ class Temp extends Component {
     const response = axios.get(url, config);
     response.then(res => {
       let dados = res.data;
-      console.log(dados[dados.length - 1]);
+      this.sort(dados);
       this.setState({ retorno: dados[dados.length - 1] });
+      this.intervalID = setTimeout(this.getData.bind(this), 60000);
     });
-
-  };
+  }
 
   render() {
+    let last = this.state.last;
+
     return (
       <div>
-        <div className="card">
-          <div className="container">
-            <h2><b>Temperatura</b></h2>
-            <p><b>ID: </b>{this.state.retorno.id}</p>
-            <p><b>Temp: </b>{this.state.retorno.temp} ºC</p>
-            <p><b>Volts: </b>{this.state.retorno.volts} v</p>
+        <nav>
+          <div class="nav-wrapper blue-grey darken-1">
+            <a href="/#" class="brand-logo">Temperatura</a>
           </div>
-        </div>
-        <div className="App">
-          <Link to="/">HOME</Link>
+        </nav>
+
+        <div class="row">
+          <div class="col s12 m2">
+            <div class="card blue-grey darken-1">
+              <div class="card-content white-text">
+                <span class="card-title">Dispositivo {last.id}</span>
+                <p><b>Temperatura: </b>{last.temp} ºC</p>
+                <p><b>Tensão: </b>{last.volts} v</p>
+                <p><b>Record Id: </b>{last.db_id}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   };
 }
 
-export default Temp;
+export default Temperatura;
