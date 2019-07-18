@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './app/App';
 import Temperatura from './temperatura/Temperatura'
 import * as serviceWorker from './serviceWorker';
 
-import { BrowserRouter, Switch, Route } from 'react-router-dom'; // importando o BrowserRouter do pacote que acabamos de instalar
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 //ReactDOM.render(<App />, document.getElementById('_meter'));
 ReactDOM.render(
