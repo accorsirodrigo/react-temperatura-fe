@@ -6,7 +6,8 @@ class Temperatura extends Component {
   intervalID;
   state = {
     retorno: {},
-    last: {}
+    last: {},
+    records: {}
   };
 
   sort = data => {
@@ -45,12 +46,15 @@ class Temperatura extends Component {
       let dados = res.data;
       this.sort(dados);
       this.setState({ retorno: dados[dados.length - 1] });
+      this.setState({ records: dados.length });
       this.intervalID = setTimeout(this.getData.bind(this), 60000);
     });
   }
 
   render() {
-    let last = this.state.last;
+    let state = this.state;
+    let last = state.last;
+    let records = state.records;
 
     return (
       <div>
@@ -68,6 +72,7 @@ class Temperatura extends Component {
                 <p><b>Temperatura: </b>{last.temp} ºC</p>
                 <p><b>Tensão: </b>{last.volts} v</p>
                 <p><b>Record Id: </b>{last.db_id}</p>
+                <p><b>Records: </b>{records}</p>
               </div>
             </div>
           </div>
