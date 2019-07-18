@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './app/App';
 import Temperatura from './temperatura/Temperatura'
 import * as serviceWorker from './serviceWorker';
 
